@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
+        stage1('Clone Repository') {
             steps {
                 // Clone the GitHub repository
                  git branch: 'main', url: 'https://github.com/Mini-Projects-6th-Sem/e-commerce-website'
@@ -10,14 +10,14 @@ pipeline {
                 bat 'dir'
             }
         }
-        stage('Deploy MongoDB') {
+        stage2('Deploy MongoDB') {
             steps {
                 // Deploy MongoDB using kubectl
                 bat 'kubectl apply -f mongodb-deployment.yaml'
                 bat 'kubectl apply -f mongodb-service.yaml'
             }
         }
-        stage('Deploy RabbitMQ') {
+        stage3('Deploy RabbitMQ') {
             steps {
                 // Deploy RabbitMQ using kubectl
                 bat 'kubectl apply -f rabbitmq-deployment.yaml'
@@ -25,7 +25,7 @@ pipeline {
                 sleep time: 60, unit: 'SECONDS'
             }
         }
-        stage('Build and Deploy Microservices') {
+        stage4('Build and Deploy Microservices') {
             steps {
                 // Build Docker images for each microservice
                 dir('user-microservice'){
@@ -51,7 +51,7 @@ pipeline {
                 }            
             }
         }
-        stage('Port Forwarding') {
+        stage5('Port Forwarding') {
             steps {
                 // Port forward each microservice for local testing
                 bat 'kubectl port-forward services/user-microservice 7070:7070'
@@ -59,7 +59,7 @@ pipeline {
                 bat 'kubectl port-forward services/order-microservice 9090:9090'
             }
         }
-        stage('Port Forwarding') {
+        stage6('Port Forwarding') {
             
                 // Run steps in parallel within the same stage
                 parallel {
